@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.util;
 
+import org.w3c.dom.ls.LSOutput;
 import ru.javawebinar.topjava.model.UserMeal;
 import ru.javawebinar.topjava.model.UserMealWithExcess;
 
@@ -47,7 +48,7 @@ public class UserMealsUtil {
         List<UserMealWithExcess> mealsTo = filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000);
         mealsTo.forEach(System.out::println);
 
-//        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
+        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
 
     public static List<UserMealWithExcess> filteredByCycles(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -84,11 +85,15 @@ public class UserMealsUtil {
     }
 
     public static List<UserMealWithExcess> filteredByStreams(List<UserMeal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
-        // TODO Implement by streams
-        meals.stream().sorted(Comparator.comparing(UserMeal::getDateTime)).
-                filter(k -> k.getDateTime().toLocalTime().isAfter(startTime) &&
-                k.getDateTime().toLocalTime().isBefore(endTime)).
-                collect(Collectors.toList());
-        return null;
+        Map<LocalDate, Integer> collect = meals.stream().collect(Collectors.
+                groupingBy(um -> um.getDateTime().toLocalDate(), Collectors.summingInt(UserMeal::getCalories)));
+
+        List<UserMealWithExcess> collect1 = meals.stream().filter(um -> (um.getDateTime().toLocalTime().isAfter(startTime)
+                && um.getDateTime().toLocalTime().isBefore(endTime)))
+                .map(um -> new UserMealWithExcess(um.getDateTime(), um.getDescription(), um.getCalories(),
+                        collect.get(um.getDateTime().toLocalDate()) > caloriesPerDay))
+                .collect(Collectors.toList());
+        collect1.forEach(System.out::println);
+        return collect1;
     }
 }
