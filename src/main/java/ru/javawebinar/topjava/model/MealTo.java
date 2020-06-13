@@ -43,6 +43,10 @@ public class MealTo {
         return excess;
     }
 
+    public int getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "MealTo{" +

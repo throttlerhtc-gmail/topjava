@@ -1,7 +1,7 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,7 +9,10 @@ import java.util.List;
 
 public class InMemoryMealRepositoryImpl implements InMemoryMealRepository {
 
-    private final List<Meal> meals = Collections.synchronizedList(new ArrayList<>());
+    public static final List<Meal> meals = Collections.synchronizedList(new ArrayList<>());
+    static {
+        meals.addAll(MealsUtil.getHardcodedMeals());
+    }
 
     @Override
     public boolean create(Meal meal) {
