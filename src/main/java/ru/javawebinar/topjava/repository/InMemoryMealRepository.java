@@ -1,18 +1,45 @@
 package ru.javawebinar.topjava.repository;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public interface InMemoryMealRepository {
-    public boolean create(Meal meal); //  create meal from UI in repo
+public class InMemoryMealRepository implements MealRepository {
+    private Map<Integer, Meal> repository = new ConcurrentHashMap<>();
+    private AtomicInteger counter = new AtomicInteger(0);
 
-    public boolean update(Meal meal, int mealId); // update meal with Id in repo
+    {
+        MealsUtil.MEALS.forEach(this::save);
+    }
 
-    public boolean delete(int mealId);   // delete from repo
+    @Override
+    public Meal save(Meal meal) {
+        if (meal.isNew()) {
+            meal.setId(counter.incrementAndGet());
+            repository.put(meal.getId(), meal);
+            return meal;
+        }
+        // handle case: update, but not present in storage
+        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
+    }
 
-    public Meal getMealById(int mealId); // get meal by Id
+    @Override
+    public boolean delete(int id) {
+        return repository.remove(id) != null;
+    }
 
-    public List<Meal> getMeals(); // get all meal for all users
+    @Override
+    public Meal get(int id) {
+        return repository.get(id);
+    }
+
+    @Override
+    public Collection<Meal> getAll() {
+        return repository.values();
+    }
 }
+
