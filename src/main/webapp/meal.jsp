@@ -19,7 +19,7 @@
         <label>Meal id:</label><br/>
         <input type="text" readonly="readonly" /> <br/>
         <label>DateTime:</label><br/>
-        <input type="datetime-local" name="dateTime" /> <br/>
+        <input type="text" name="dateTime" /> <br/>
         <label>Description:</label><br/>
         <input type="text" name="description" /> <br/>
         <label>Calories:</label><br/>
