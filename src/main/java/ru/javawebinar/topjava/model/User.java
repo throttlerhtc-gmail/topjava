@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Set;
