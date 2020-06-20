@@ -6,9 +6,26 @@
 <body>
 <h3>Проект <a href="https://github.com/JavaWebinar/topjava" target="_blank">Java Enterprise (Topjava)</a></h3>
 <hr>
-<ul>
-    <li><a href="users">Users</a></li>
-    <li><a href="meals">Meals</a></li>
-</ul>
+<!--<a href="users">Users</a>-->
+<!--<br><br>-->
+<!--<form method="post" action="users.jsp">-->
+<!--    <label for="user">Choose a user:</label>-->
+<!--    <select name="user" id="user">-->
+<!--        <option value="admin">-->
+<!--            <a href="meals?action=update&id=${meal.id}">Admin</a>-->
+<!--        </option>-->
+<!--        <option value="user">-->
+<!--            <a href="meals?action=update&id=${meal.id}">User</a>-->
+<!--        </option>-->
+<!--    </select>-->
+<!--    <br><br>-->
+<!--    <input type="submit" value="Submit">-->
+<!--</form>-->
+
+<a href="users?action=getAll&id=1">Admin</a>
+<br>
+<a href="users?action=getAll&id=2">User</a>
+<br><br>
+<!--<a href="meals">Meals</a>-->
 </body>
 </html>
