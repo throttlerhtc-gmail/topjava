@@ -1,11 +1,5 @@
 package ru.javawebinar.topjava.util;
 
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
-
-import java.util.Arrays;
-import java.util.List;
-
 public class UserUtil {
 
 //    public static final User ADMIN = new User(1, "Admin", "admin@mail.ru", "password", Role.ADMIN);
