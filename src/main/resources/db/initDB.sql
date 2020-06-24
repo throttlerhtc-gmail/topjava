@@ -33,6 +33,6 @@ CREATE TABLE meals
     description      VARCHAR                 NOT NULL,
     calories         INTEGER DEFAULT 10      NOT NULL,
     user_id          INTEGER                 NOT NULL,
-    CONSTRAINT meal_user UNIQUE (id, user_id),
+    CONSTRAINT meal_datetime_lim UNIQUE (user_id, date_time),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
