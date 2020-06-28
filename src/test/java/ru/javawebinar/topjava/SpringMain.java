@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava;
 
+import org.junit.Rule;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import ru.javawebinar.topjava.model.Role;
@@ -15,6 +16,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SpringMain {
+
+    @Rule
     public static void main(String[] args) {
         // java 7 automatic resource management
         try (ConfigurableApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml", "spring/inmemory.xml")) {
