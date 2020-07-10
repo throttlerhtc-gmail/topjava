@@ -60,7 +60,7 @@ public class MealServiceTest {
     };
 
     @Rule
-    public TestName name= new TestName();
+    public final TestName name= new TestName();
 
     @Rule
     public final ExternalResource resource = new ExternalResource() {
