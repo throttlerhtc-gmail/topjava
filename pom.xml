@@ -167,6 +167,13 @@
             <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--Some features-->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
     </dependencies>
 
     <profiles>
