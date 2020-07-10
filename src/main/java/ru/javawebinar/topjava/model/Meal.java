@@ -103,6 +103,7 @@ public class Meal extends AbstractBaseEntity {
 
     @Override
     public String toString() {
+        System.out.println("");
         return "Meal{" +
                 "id=" + id +
                 ", dateTime=" + dateTime +
