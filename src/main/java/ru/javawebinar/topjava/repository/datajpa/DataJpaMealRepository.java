@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.datajpa;
 
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import java.time.LocalDateTime;
@@ -12,17 +13,25 @@ public class DataJpaMealRepository implements MealRepository {
 
     private final CrudMealRepository crudRepository;
 
-    public DataJpaMealRepository(CrudMealRepository crudRepository) {
+    private final CrudUserRepository crudUserRepository;
+
+    public DataJpaMealRepository(CrudMealRepository crudRepository, CrudUserRepository crudUserRepository) {
         this.crudRepository = crudRepository;
+        this.crudUserRepository = crudUserRepository;
     }
 
     @Override
     public Meal save(Meal meal, int userId) {
-        System.out.println(meal.getUser());
-        if (meal.getUser().getId() != userId) {
-            return null;
+        User user = crudUserRepository.getOne(userId);
+        Meal m = meal;
+        if (meal.isNew()) {
+            meal.setUser(user);
+            return crudRepository.save(meal);
+        } else {
+            m = (crudRepository.save(meal.getId(), userId, meal.getDateTime()
+                    , meal.getDescription(), meal.getCalories()) != 0 ? meal : null);
         }
-        return crudRepository.save(meal);
+        return m;
     }
 
     @Override
@@ -42,6 +51,6 @@ public class DataJpaMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return null;
+        return crudRepository.findAll(startDateTime, endDateTime, userId);
     }
 }

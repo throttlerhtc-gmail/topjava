@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Meal;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +24,15 @@ public interface CrudMealRepository extends JpaRepository<Meal, Integer> {
     @Query("select m from Meal m where m.id=:id AND m.user.id=:userId")
     Optional<Meal> findById(@Param("id") Integer id, @Param("userId") Integer userId);
 
-//    @Transactional
-//    @Modifying
-//    @Query(name = Meal.UPDATE)
-//    Meal save(@Param("id") Meal meal, @Param("userId") int userId);
+    @Query(name = Meal.GET_BETWEEN)
+    List<Meal> findAll(@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime
+            , @Param("userId") Integer userId);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Meal m SET m.dateTime = :datetime, m.calories= :calories" +
+            ", m.description=:description, m.user.id=:userId WHERE m.id=:id AND m.user.id=:userId")
+    int save(@Param("id") int id, @Param("userId") int userId, @Param("datetime") LocalDateTime dateTime
+            , @Param("description") String description
+            , @Param("calories") int calories);
 }
