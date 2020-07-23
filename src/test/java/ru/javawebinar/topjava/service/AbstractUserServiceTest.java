@@ -1,8 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assume;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
@@ -30,15 +28,6 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected JpaUtil jpaUtil;
-
-    @BeforeClass
-    public static void checkProfile() {
-        Assume.assumeTrue(isJpaBased());
-    }
-
-    private static boolean isJpaBased() {
-        return !System.getProperty("spring.profile.active").toLowerCase().contains("jdbc");
-    }
 
     @Before
     public void setUp() throws Exception {
