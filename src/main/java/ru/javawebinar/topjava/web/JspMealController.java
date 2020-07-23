@@ -82,8 +82,7 @@ public class JspMealController {
 
     @GetMapping("/meals")
     private String getAll(Model model, HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        SecurityUtil.setAuthUserId(userId);
+        int userId = SecurityUtil.authUserId();
         model.addAttribute("meals", service.getAll(userId));
         return "meals";
     }
