@@ -1,23 +1,39 @@
 package ru.javawebinar.topjava.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.service.MealService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 
 @Controller
-public class JspMealController {/*
+public class JspMealController {
 
     @Autowired
     private MealService service;
 
 //    private MealRestController mealController;
 
+/*
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         WebApplicationContext springContext = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
         mealController = springContext.getBean(MealRestController.class);
     }
+*/
 
+/*
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
@@ -33,7 +49,9 @@ public class JspMealController {/*
         }
         response.sendRedirect("meals");
     }
+*/
 
+/*
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
@@ -52,9 +70,10 @@ public class JspMealController {/*
             default -> getAll(request, response);
         }
     }
+*/
 
     @DeleteMapping("/meals")
-    private String delete(@RequestParam(name="id", required=true*//*, defaultValue="  "*//*) Integer id, HttpServletRequest request) {
+    private String delete(@RequestParam(name="id", required=true, defaultValue="  ") Integer id, HttpServletRequest request) {
         int userId = Integer.parseInt(request.getParameter("userId"));
         SecurityUtil.setAuthUserId(userId);
         service.delete(id, userId);
@@ -70,16 +89,16 @@ public class JspMealController {/*
     }
 
     @PostMapping("/meals")
-    public void create(HttpServletRequest request, HttpServletResponse response, String action) throws ServletException, IOException {
-        final Meal meal = "create".equals(action) ?
-                new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                mealController.get(getId(request));
+    public String create(HttpServletRequest request) {
+        int userId = Integer.parseInt(request.getParameter("userId"));
+        SecurityUtil.setAuthUserId(userId);
+        final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) ;
         request.setAttribute("meal", meal);
-        request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
+        return "redirect:mealForm";
     }
 
     private int getId(HttpServletRequest request) {
         String paramId = Objects.requireNonNull(request.getParameter("id"));
         return Integer.parseInt(paramId);
     }
-*/}
+}
