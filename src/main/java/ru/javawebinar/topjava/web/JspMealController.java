@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.service.MealService;
+import ru.javawebinar.topjava.web.meal.MealRestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -18,11 +18,8 @@ import java.util.Objects;
 
 @Controller
 public class JspMealController {
-
     @Autowired
-    private MealService service;
-
-//    private MealRestController mealController;
+    private MealRestController mealController;
 
 /*
     @Override
@@ -73,25 +70,20 @@ public class JspMealController {
 */
 
     @DeleteMapping("/meals")
-    private String delete(@RequestParam(name="id", required=true, defaultValue="  ") Integer id, HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        SecurityUtil.setAuthUserId(userId);
-        service.delete(id, userId);
+    private String delete(@RequestParam(name = "id", required = true, defaultValue = "  ") Integer id, HttpServletRequest request) {
+        mealController.delete(id);
         return "redirect:meals";
     }
 
     @GetMapping("/meals")
     private String getAll(Model model, HttpServletRequest request) {
-        int userId = SecurityUtil.authUserId();
-        model.addAttribute("meals", service.getAll(userId));
+        model.addAttribute("meals", mealController.getAll());
         return "meals";
     }
 
     @PostMapping("/meals")
     public String create(HttpServletRequest request) {
-        int userId = Integer.parseInt(request.getParameter("userId"));
-        SecurityUtil.setAuthUserId(userId);
-        final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) ;
+        final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         request.setAttribute("meal", meal);
         return "redirect:mealForm";
     }
