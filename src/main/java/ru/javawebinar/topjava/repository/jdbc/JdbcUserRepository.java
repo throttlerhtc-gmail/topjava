@@ -8,10 +8,13 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class JdbcUserRepository implements UserRepository {
@@ -57,18 +60,86 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public User get(int id) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE id=?", ROW_MAPPER, id);
-        return DataAccessUtils.singleResult(users);
+        return DataAccessUtils.singleResult(acceptJdbcUsersRoles(users));
     }
 
     @Override
     public User getByEmail(String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
-        return DataAccessUtils.singleResult(users);
+        return DataAccessUtils.singleResult(acceptJdbcUsersRoles(users));
     }
 
     @Override
     public List<User> getAll() {
-        return jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
+        List<User> usersList = jdbcTemplate.query("SELECT * FROM users ORDER BY name, email", ROW_MAPPER);
+        return acceptJdbcUsersRoles(usersList);
+//        for (User u : usersList) {
+//            u.setRoles(EnumSet.noneOf(Role.class));
+//            jdbcTemplate.query("SELECT users.id, users.name, users.email, users.password, users.registered" +
+//                    ", users.enabled, users.calories_per_day, user_roles.role FROM users, user_roles WHERE users.id=user_roles.user_id AND id=?", new RowMapper<User>() {
+//                @Override
+//                public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                    u.setId(Integer.parseInt(rs.getString("id")));
+//                    u.setName(rs.getString("name"));
+//                    u.setEmail(rs.getString("email"));
+//                    u.setPassword(rs.getString("password"));
+//                    u.setRegistered(Timestamp.valueOf(rs.getString("registered")));
+//                    u.setEnabled("t".equals(rs.getString("enabled")));
+//                    u.setCaloriesPerDay(Integer.parseInt(rs.getString("calories_per_day")));
+//                    if (rs.getString("role").toLowerCase().contains("user")) {
+//                        u.getRoles().add(Role.USER);
+//                    }
+//                    if (rs.getString("role").toLowerCase().contains("admin")) {
+//                        u.getRoles().add(Role.ADMIN);
+//                    }
+//                    if (rs.getString("role").toLowerCase().contains("super")) {
+//                        u.getRoles().add(Role.SUPER);
+//                    }
+//                    return u;
+//                }
+//            }, u.getId());
+//        }
+//        return jdbcTemplate.query("SELECT users.id, users.name, users.email, users.password, users.registered, users.enabled" +
+//                ", users.calories_per_day, user_roles.role FROM users, user_roles WHERE id=user_id ORDER BY name, email", new RowMapper<User>() {
+//            @Override
+//            public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+//                User user = new User();
+//                user.setRoles(EnumSet.of(Role.USER));
+//                user.setId(Integer.parseInt(rs.getString("id")));
+//                user.setName(rs.getString("name"));
+//                user.setEmail(rs.getString("email"));
+//                user.setPassword(rs.getString("password"));
+//                user.setRegistered(Timestamp.valueOf(rs.getString("registered")));
+//                user.setEnabled(Boolean.parseBoolean(rs.getString("enabled")));
+//                user.setCaloriesPerDay(Integer.parseInt(rs.getString("calories_per_day")));
+//                if (rs.getString("role").toLowerCase().contains("user")) {
+//                    user.getRoles().add(Role.USER);
+//                }
+//                if (rs.getString("role").toLowerCase().contains("admin")) {
+//                    user.getRoles().add(Role.ADMIN);
+//                }
+//                return user;
+//            }
+//        });
+//        return usersList;
+    }
+
+    public List<User> acceptJdbcUsersRoles(List<User> usersList) {
+        List<Map<String, Object>> rolesList = jdbcTemplate.queryForList("SELECT * FROM user_roles");
+        for (User u : usersList) {
+            u.setRoles(EnumSet.noneOf(Role.class));
+            for (Map<String, Object> pair : rolesList) {
+                int id = 0;
+                if (pair.get("user_id") instanceof Integer) {
+                    id = (Integer) pair.get("user_id");
+                }
+                Role r = Role.valueOf((String)pair.get("role"));
+                if (id == u.getId()) {
+                    u.getRoles().add(r);
+                }
+            }
+        }
+        return usersList;
     }
 }

@@ -59,6 +59,14 @@
 
     <beans profile="jdbc">
         <context:component-scan base-package="ru.javawebinar.**.repository.jdbc"/>
+
+        <!-- enable the configuration of transactional behavior based on annotations -->
+        <tx:annotation-driven transaction-manager="txManager"/><!-- a PlatformTransactionManager is still required -->
+        <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <!-- (this dependency is defined somewhere else) -->
+            <property name="dataSource" ref="dataSource"/>
+        </bean>
+
         <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
             <constructor-arg ref="dataSource"/>
         </bean>
