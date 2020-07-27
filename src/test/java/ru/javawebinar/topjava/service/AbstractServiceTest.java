@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.BeforeClass;
 import org.junit.ClassRule;
 import org.junit.Rule;
 import org.junit.rules.ExternalResource;
@@ -15,6 +16,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.TimingRules;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.util.ValidationUtil.getRootCause;
 
@@ -29,6 +34,15 @@ abstract public class AbstractServiceTest {
 
     @Autowired
     protected Environment environment;
+
+    protected static Validator validator;
+
+
+    @BeforeClass
+    public static void setUpValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
 
 
     @ClassRule

@@ -14,13 +14,15 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
 
 @Repository
 @Transactional
-public class JdbcUserRepository implements UserRepository {
+public class JdbcUserRepository extends AbstractJdbcValidator implements UserRepository {
 
     private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
@@ -29,6 +31,8 @@ public class JdbcUserRepository implements UserRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     private final SimpleJdbcInsert insertUser;
+
+    private Set<ConstraintViolation<User>> violations;
 
     @Autowired
     public JdbcUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
@@ -43,6 +47,13 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     public User save(User user) {
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
+
+        violations = validator.validate(user);
+        if (!violations.isEmpty()) {
+            System.out.println(violations);
+            throw new ConstraintViolationException(violations);
+        }
+
         List<Role> roles = new ArrayList<>();
         roles.addAll(user.getRoles());
         int[] butchUpdates;

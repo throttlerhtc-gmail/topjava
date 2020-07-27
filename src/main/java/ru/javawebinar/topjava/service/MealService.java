@@ -44,6 +44,20 @@ public class MealService {
     }
 
     public Meal create(Meal meal, int userId) {
+//        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+//        Validator validator = validatorFactory.getValidator();
+//        ExecutableValidator executableValidator = validator.forExecutables();
+//        Method method = null;
+//        try {
+//            method = repository.getClass().getMethod("save", Meal.class, int.class);
+//        } catch (NoSuchMethodException e) {
+//            e.printStackTrace();
+//        }
+//        Meal mealPersisted = repository.save(meal, userId);
+//        Set<ConstraintViolation<MealRepository>> argsViolations = executableValidator
+//                .validateParameters(repository, method, new Object[]{meal, userId});
+//        System.out.println(argsViolations);
+//        System.out.println(mealPersisted);
         Assert.notNull(meal, "meal must not be null");
         return repository.save(meal, userId);
     }
