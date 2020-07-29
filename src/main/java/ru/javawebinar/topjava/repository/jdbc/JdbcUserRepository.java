@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
+import org.springframework.data.jdbc.core.OneToManyResultSetExtractor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -83,6 +84,7 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public List<User> getAll() {
+        OneToManyResultSetExtractor ewew;
         Map<Integer, Set<Role>> map = new HashMap<>();
         jdbcTemplate.query("SELECT * FROM user_roles", rs -> {
             map.computeIfAbsent(rs.getInt("user_id"), userId -> EnumSet.noneOf(Role.class))

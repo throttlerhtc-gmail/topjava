@@ -140,6 +140,16 @@
         </dependency>
 
 
+<!--        JDBC OneToManyResultSetExtractor-->
+        <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jdbc-core -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-jdbc-core</artifactId>
+            <version>1.2.1.RELEASE</version>
+        </dependency>
+
+
+
         <!--- ORM -->
         <dependency>
             <groupId>org.hibernate</groupId>
