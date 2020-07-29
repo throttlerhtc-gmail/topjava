@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 
-class AdminRestControllerTest extends AbstractControllerTest {
+class AdminRestControllerTest extends AbstractControllerTest { // @Transactional in Tests produce StackOverflow, not LazyInit Exception
 
     private static final String REST_URL = AdminRestController.REST_URL + '/';
 
