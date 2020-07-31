@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.meal;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +10,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.net.URI;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -34,7 +34,7 @@ public class MealRestController extends AbstractMealController {
 
     @Override
     @GetMapping
-    public List<Meal> getAll() {
+    public List<MealTo> getAll() {
         return super.getAll();
     }
 
@@ -45,10 +45,17 @@ public class MealRestController extends AbstractMealController {
         super.update(meal, id);
     }
 
-    @Override
+//    @Override
     @GetMapping("/between")
-    public List<Meal> getBetween(@RequestParam LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
-        return super.getBetween(startDate, startTime, endDate, endTime);
+    public List<MealTo> getBetweenTimestamps(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                   @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end) {
+//    public List<MealTo> getBetween(@RequestParam
+//                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime) {
+
+        List<MealTo> between = super.getBetween(start.toLocalDate(), start.toLocalTime(),
+                end.toLocalDate(), end.toLocalTime());
+        System.out.println(between);
+        return between;
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

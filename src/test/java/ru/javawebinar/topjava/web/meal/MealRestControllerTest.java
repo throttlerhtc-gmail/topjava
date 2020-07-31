@@ -19,6 +19,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfDayOrMin;
+import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfNextDayOrMax;
 import static ru.javawebinar.topjava.web.meal.MealRestController.MEAL_REST_URL;
 
 class MealRestControllerTest extends AbstractControllerTest {
@@ -47,17 +49,31 @@ class MealRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getAll() throws Exception {
-        perform(MockMvcRequestBuilders.get(MEAL_REST_URL))
+
+//        https://stackoverflow.com/questions/4486787/jackson-with-json-unrecognized-field-not-marked-as-ignorable
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_MATCHER.contentJson(MEALS));
+
+//        ResultActions perform = perform(MockMvcRequestBuilders.get(MEAL_REST_URL));
+//        MvcResult result = perform
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+//                .andReturn();
+////        https://stackoverflow.com/questions/46885972/mockmvc-in-junit-tests-checking-result-for-listobject-and-mapenum-object
+//        System.out.println(result.getResponse().getContentAsString() + "\n ++++++++");
+//        List<Meal> actual = getMapper().readValue(result.getResponse().getContentAsString(), new TypeReference<List<Meal>>() {});
+//        System.out.println(actual  + "\n ++++++++++");
+//        MEAL_MATCHER2.assertMatch(actual, MEALS);
     }
 
     @Test
     void update() throws Exception {
         Meal updated = MealTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + MEAL1)
+        perform(MockMvcRequestBuilders.put(REST_URL + MEAL1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
@@ -67,17 +83,24 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() {
+    void getBetween() throws  Exception {
+        perform(MockMvcRequestBuilders
+                .get(REST_URL + "between?start={?}&end={?}"
+                , atStartOfDayOrMin(null), atStartOfNextDayOrMax(null)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MEAL_MATCHER.contentJson(MEALS));
     }
 
     @Test
     void createWithLocation() throws Exception {
         Meal newMeal = MealTestData.getNew();
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + MEAL1)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newMeal)))
                 .andDo(print())
-                .andExpect(status().isNoContent());
+                .andExpect(status().isCreated());
 
         Meal created = TestUtil.readFromJson(action, Meal.class);
         int newId = created.getId();
