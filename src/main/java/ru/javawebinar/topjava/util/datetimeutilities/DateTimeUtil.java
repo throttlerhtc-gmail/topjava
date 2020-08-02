@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.util;
+package ru.javawebinar.topjava.util.datetimeutilities;
 
 import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
@@ -14,9 +14,21 @@ public class DateTimeUtil {
 
     // DB doesn't support LocalDate.MIN/MAX
     private static final LocalDateTime MIN_DATE = LocalDateTime.of(1, 1, 1, 0, 0);
-    private static final LocalDateTime MAX_DATE = LocalDateTime.of(3000, 1, 1, 23, 0);
+    private static final LocalDateTime MAX_DATE = LocalDateTime.of(3000, 1, 1, 0, 0);
 
     private DateTimeUtil() {
+    }
+
+    public static DateTimeFormatter getDateTimeFormatter() {
+        return DATE_TIME_FORMATTER;
+    }
+
+    public static LocalDate getDateOrMinDate(String formatted) {
+        return parseLocalDate(formatted) != null ? parseLocalDate(formatted) : MIN_DATE.toLocalDate();
+    }
+
+    public static LocalTime getTimeOrMinTime(String formatted) {
+        return parseLocalTime(formatted) != null ? parseLocalTime(formatted) : MIN_DATE.toLocalTime();
     }
 
     public static LocalDateTime atStartOfDayOrMin(LocalDate localDate) {

@@ -9,9 +9,9 @@ import ru.javawebinar.topjava.repository.MealRepository;
 import java.time.LocalDate;
 import java.util.List;
 
-import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfDayOrMin;
-import static ru.javawebinar.topjava.util.DateTimeUtil.atStartOfNextDayOrMax;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
+import static ru.javawebinar.topjava.util.datetimeutilities.DateTimeUtil.atStartOfDayOrMin;
+import static ru.javawebinar.topjava.util.datetimeutilities.DateTimeUtil.atStartOfNextDayOrMax;
 
 @Service
 public class MealService {
