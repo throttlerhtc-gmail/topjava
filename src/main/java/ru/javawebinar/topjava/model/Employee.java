@@ -1,13 +1,9 @@
 package ru.javawebinar.topjava.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
 public class Employee {
 
-    @Id
     private long id;
+
     private double salary;
 
     public Employee() {

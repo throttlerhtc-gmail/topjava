@@ -14,8 +14,9 @@ class StringToEmployeeConverterControllerTest extends AbstractControllerTest {
 
     @Test
     void getStringToEmployee() throws Exception {
-        perform(MockMvcRequestBuilders.get("/string-to-employee?employee=1,2000"))
-                .andDo(print());
+        perform(MockMvcRequestBuilders.get("/string-to-employee?employee={1,2000}"))
+                .andDo(print())
+        .andReturn();
 //                .andExpect(jsonPath("$.id", is(1)))
 //                .andExpect(jsonPath("$.salary", is(2000.0))) {
     }

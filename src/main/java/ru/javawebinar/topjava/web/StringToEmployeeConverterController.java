@@ -11,9 +11,9 @@ import ru.javawebinar.topjava.web.user.AbstractUserController;
 @RestController
 public class StringToEmployeeConverterController extends AbstractUserController {
 
-    @GetMapping("/string-to-employee")
-    public ResponseEntity<Employee> getStringToEmployee(
-            @RequestParam("employee") Employee employee) {
+    @GetMapping(value = "/string-to-employee")
+    public ResponseEntity<Object> getStringToEmployee(@RequestParam("employee") Employee employee) {
+        System.out.println(employee + "\n++++++++++++++++++++++++++++++");
         return ResponseEntity.ok(employee);
     }
 

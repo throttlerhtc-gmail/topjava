@@ -7,30 +7,30 @@
 
     <bean class="ru.javawebinar.topjava.web.json.JacksonObjectMapper" id="objectMapper" factory-method="getMapper"/>
 
-    <mvc:annotation-driven conversion-service="conversionService"/>
-    <bean id="conversionService"
-          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
-        <property name="registerDefaultFormatters" value="false"/>
-        <property name="converters">
-            <set>
-                <bean class="ru.javawebinar.topjava.util.StringToEmployeeConverter"/>
-                <!--                <bean class="ru.javawebinar.topjava.util.datetimeutilities.LdtFromRestString"/>-->
-            </set>
-        </property>
-        <property name="formatters">
-            <set>
-                <!--                        <bean class="ru.javawebinar.topjava.util.datetimeutilities.LocalDateTimeInRestFormatter"/>-->
-                <!--                        <bean class="ru.javawebinar.topjava.util.datetimeutilities.LocalDateTimeInRestAnnotationFormatterFactory"/>-->
-                <bean class="ru.javawebinar.topjava.util.StringToEmployeeFormatter"/>
-            </set>
-        </property>
-        <property name="formatterRegistrars">
-            <set>
-                <bean class="ru.javawebinar.topjava.util.EmployeeApplicationFormatterRegister"/>
-                <!--                <bean class="ru.javawebinar.topjava.util.datetimeutilities.ApplicationFormatterRegister"/>-->
-            </set>
-        </property>
-    </bean>
+<!--    <mvc:annotation-driven conversion-service="conversionService"/>-->
+<!--    <bean id="conversionService"-->
+<!--          class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+<!--        <property name="registerDefaultFormatters" value="false"/>-->
+<!--        <property name="converters">-->
+<!--            <set>-->
+<!--                <bean class="ru.javawebinar.topjava.util.StringToEmployeeConverter"/>-->
+<!--                &lt;!&ndash;                <bean class="ru.javawebinar.topjava.util.datetimeutilities.LdtFromRestString"/>&ndash;&gt;-->
+<!--            </set>-->
+<!--        </property>-->
+<!--        <property name="formatters">-->
+<!--            <set>-->
+<!--                &lt;!&ndash;                        <bean class="ru.javawebinar.topjava.util.datetimeutilities.LocalDateTimeInRestFormatter"/>&ndash;&gt;-->
+<!--                &lt;!&ndash;                        <bean class="ru.javawebinar.topjava.util.datetimeutilities.LocalDateTimeInRestAnnotationFormatterFactory"/>&ndash;&gt;-->
+<!--                <bean class="ru.javawebinar.topjava.util.StringToEmployeeFormatter"/>-->
+<!--            </set>-->
+<!--        </property>-->
+<!--        <property name="formatterRegistrars">-->
+<!--            <set>-->
+<!--                <bean class="ru.javawebinar.topjava.util.EmployeeApplicationFormatterRegister"/>-->
+<!--                &lt;!&ndash;                <bean class="ru.javawebinar.topjava.util.datetimeutilities.ApplicationFormatterRegister"/>&ndash;&gt;-->
+<!--            </set>-->
+<!--        </property>-->
+<!--    </bean>-->
 
 
     <mvc:annotation-driven>
